@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/blaze_trunk"/>
+	<classpathentry kind="var" path="GRADLE_REPO/cache/org.jboss.netty/netty/bundles/netty-3.1.5.GA.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
