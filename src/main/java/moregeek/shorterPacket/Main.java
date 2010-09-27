@@ -11,10 +11,11 @@ import com.moregeek.blaze.net.NeuronPacketHeader;
 import com.moregeek.blaze.net.OpType;
 import com.moregeek.blaze.net.interserver.E2eBuffer;
 
-public class Main {
-	private String sessionKey = "8f5f5059bbb3f8ae224b08cbeb165bd3";
+public class Main implements Runnable{
+	private String sessionKey = "ce9c2e2f3bb534decbf2a4881864fef5";
 	private int matchId = 0;
 	private byte ticketId;
+	private Client client;
 	
 	public static void main(String[] args) {
 		assert args.length == 2;
@@ -28,24 +29,37 @@ public class Main {
 	
 	public Main(String host, int port) {
 		Client client = new Client(host, port, this);
-			
-        Channel channel = client.getChannel();
-        
-        loginGameServer(channel);
-        createMatch(channel);
-        
-        while (matchId == 0) {}
-        
-        changeMatchState(channel);
-        startfight(channel);
-        
-        try {
-			TimeUnit.SECONDS.sleep(3);
+		this.client = client;
+	}
+
+	public void run(Channel channel) {
+//		login(channel);		
+      loginGameServer(channel);
+      createMatch(channel);
+      
+//      while (matchId == 0) {
+    	  try {
+			TimeUnit.SECONDS.sleep(5);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-        
-        /// attack
+//			System.out.println("matchId:"+matchId);
+//      }
+      
+      changeMatchState(channel);
+//      startfight(channel);
+//      
+//      try {
+//			TimeUnit.SECONDS.sleep(3);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//      
+//      attack(channel);
+
+	}
+	private void attack(Channel channel) {
+		/// attack
         E2eBuffer buffer = new E2eBuffer();
         buffer.writeByte(NeuronPacketHeader.MHEADER);
 		buffer.markWriterIndex();
@@ -73,7 +87,6 @@ public class Main {
 		channel.write(buffer.getBuffer());
 
 		buffer.destroy();
-        
 	}
 
 	private void startfight(Channel channel) {
@@ -162,12 +175,11 @@ public class Main {
 		buffer.updateSize();
 		
 		channel.write(buffer.getBuffer());
-
 		buffer.destroy();
 	}
 
 	/// login
-	private  void login(Channel channel) {
+	public  void login(Channel channel) {
 		E2eBuffer buffer = new E2eBuffer();
         buffer.writeByte(NeuronPacketHeader.MHEADER);
 		buffer.markWriterIndex();
@@ -187,4 +199,15 @@ public class Main {
 	public void setTicketId(byte ticketId) {
 		this.ticketId = ticketId;
 	}
+
+	public void setSessionKey(String sessionKey2) {
+		this.sessionKey = sessionKey2;
+	}
+
+	@Override
+	public void run() {
+		run(client.getChannel());
+	}
+
+	
 }

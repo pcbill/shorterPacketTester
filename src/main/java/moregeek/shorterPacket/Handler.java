@@ -319,7 +319,9 @@ public class Handler extends SimpleChannelHandler{
 		for (int i = 0; i < sessionKeySize; i++) {
 			sessionKeys[i] = buffer.readByte();
 		}
-		result.append("sessionKeys:").append(new String(sessionKeys)).append(",");
+		String sessionKey = new String(sessionKeys);
+		result.append("sessionKeys:").append(sessionKey).append(",");
+		main.setSessionKey(sessionKey);
 
 		byte hostSize = buffer.readByte();
 		byte[] host = new byte[hostSize];

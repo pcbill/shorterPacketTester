@@ -15,7 +15,7 @@ public class Client extends E2eSmashClient{
 	
 	private Channel channel;
 	
-	public Client(String loginServerIp, int loginServerPort, Main main) {
+	public Client(String loginServerIp, int loginServerPort, final Main main) {
 		// Configure the client.
 		ClientBootstrap bootstrap = new ClientBootstrap(
 				new NioClientSocketChannelFactory(
@@ -33,6 +33,9 @@ public class Client extends E2eSmashClient{
 				if (future.isSuccess()) {
 					System.out.println("connection successfully....");
 					channel = future.getChannel();
+//					main.run(channel);
+					new Thread(main).start();
+//					main.login(channel);
 				}
 			}
 		});
